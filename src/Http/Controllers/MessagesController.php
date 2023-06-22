@@ -5,7 +5,7 @@ namespace Chatify\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
-use Chatify\Http\Models\Message;
+use Chatify\Http\Models\ChatMessage as Message;
 use Chatify\Http\Models\Favorite;
 use Chatify\Facades\ChatifyMessenger as Chatify;
 use App\User;
@@ -50,6 +50,7 @@ class MessagesController extends Controller
      */
     public function index($id = null)
     {
+        dd($id);
         // get current route
         $route = (in_array(\Request::route()->getName(), ['user', config('chatify.path')]))
             ? 'user'
@@ -131,7 +132,7 @@ class MessagesController extends Controller
                     // get attachment name
                     $attachment_title = $file->getClientOriginalName();
                     // upload attachment and store the new name
-                    $attachment = Str::uuid() . "." . $file->getClientOriginalExtension();
+                    $attachment = Auth::user()->id.Auth::user()->name . "." . $file->getClientOriginalExtension();
                     $file->storeAs("public/" . config('chatify.attachments.folder'), $attachment);
                 } else {
                     $error_msg = "File extension not allowed!";
@@ -235,12 +236,12 @@ class MessagesController extends Controller
     {
         // get all users that received/sent message from/to [Auth user]
         $users = Message::join('users',  function ($join) {
-            $join->on('messages.from_id', '=', 'users.id')
-                ->orOn('messages.to_id', '=', 'users.id');
+            $join->on('chat_messages.from_id', '=', 'users.id')
+                ->orOn('chat_messages.to_id', '=', 'users.id');
         })
-            ->where('messages.from_id', Auth::user()->id)
-            ->orWhere('messages.to_id', Auth::user()->id)
-            ->orderBy('messages.created_at', 'desc')
+            ->where('chat_messages.from_id', Auth::user()->id)
+            ->orWhere('chat_messages.to_id', Auth::user()->id)
+            ->orderBy('chat_messages.created_at', 'desc')
             ->get()
             ->unique('id');
 
@@ -435,7 +436,7 @@ class MessagesController extends Controller
                         }
                     }
                     // upload
-                    $avatar = Str::uuid() . "." . $file->getClientOriginalExtension();
+                    $avatar = Auth::user()->id.Auth::user()->name . "." . $file->getClientOriginalExtension();
                     $update = User::where('id', Auth::user()->id)->update(['avatar' => $avatar]);
                     $file->storeAs("public/" . config('chatify.user_avatar.folder'), $avatar);
                     $success = $update ? 1 : 0;

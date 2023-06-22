@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'name' => env('CHATIFY_NAME', 'Chatify Messenger'),
+    'name' => env('CHATIFY_NAME', 'EDGE CRM Messenger'),
 
     /*
     |--------------------------------------------------------------------------
@@ -50,11 +50,11 @@ return [
     |
     */
     'pusher' => [
-        'key' => env('PUSHER_APP_KEY'),
-        'secret' => env('PUSHER_APP_SECRET'),
+        'key' => env('PUSHER_KEY'),
+        'secret' => env('PUSHER_SECRET'),
         'app_id' => env('PUSHER_APP_ID'),
         'options' => [
-            'cluster' => env('PUSHER_APP_CLUSTER'),
+            'cluster' => env('PUSHER_CLUSTER'),
             'encrypted' => false,
         ],
     ],
@@ -93,4 +93,19 @@ return [
         // Below is the route name to download attachments.
         'route' => 'attachments.download',
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route's controllers namespace
+    |--------------------------------------------------------------------------
+    |
+    | You may need to change the namespace of the route's controllers of
+    | this package after publishing the 'controllers' asset, from the
+    | default one to your App's controllers namespace.
+    |
+    | By default: Chatify\Http\Controllers
+    |
+    */
+    'namespace' => env('CHATIFY_ROUTES_NAMESPACE', 'Chatify\Http\Controllers'),
 ];

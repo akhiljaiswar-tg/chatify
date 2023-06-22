@@ -2,7 +2,7 @@
 
 namespace Chatify;
 
-use Chatify\Http\Models\Message;
+use Chatify\Http\Models\ChatMessage as Message;
 use Chatify\Http\Models\Favorite;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\Auth;
